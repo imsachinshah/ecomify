@@ -1,7 +1,11 @@
 class ApplicationController < ActionController::API
-	include JsonWebToken
 
-	def authenticat_request
-		if 
+	before_action :authenticate_request
+
+	private
+	def authenticate_request
+		header = request.headers[:token]
+		decoded = JsonWebToken.decode(header)
+		@current_user = User.find_by(id: decoded[:id])
 	end
 end

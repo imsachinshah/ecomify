@@ -1,0 +1,3 @@
+class EmailOtpsController < ApplicationController
+  
+end

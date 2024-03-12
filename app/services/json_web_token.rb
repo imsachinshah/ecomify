@@ -1,7 +1,7 @@
 require 'jwt'
 
 class JsonWebToken 
-	attr_reader :id, :expiration
+	attr_reader :id, :data, :expiration
 
 	class << self
 		
@@ -14,7 +14,8 @@ class JsonWebToken
 		end
 
 		def decode(token)
-			JsonWebToken.new(token_data_for(token))
+			decoded = token_data_for(token)
+			HashWithIndifferentAccess.new(decoded)
 		end
 
 		private
