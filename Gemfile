@@ -49,3 +49,8 @@ gem "jwt"
 gem "jsonapi-serializer"
 gem 'pry'
 gem 'dotenv'
+gem 'devise'
+gem 'activeadmin'
+gem 'arctic_admin'
+gem 'sprockets-rails'
+gem 'sass-rails'

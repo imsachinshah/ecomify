@@ -1,3 +1,3 @@
-class EmailOtpsController < ApplicationController
+class EmailOtpsController < ApiController
   
 end

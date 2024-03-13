@@ -22,6 +22,14 @@ class User < ApplicationRecord
 		return otp_token
 	end
 
+	def self.ransackable_associations(auth_object = nil)
+	  ["email_otp"]
+	end
+
+	def self.ransackable_attributes(auth_object = nil)
+	  ["activated", "created_at", "email", "id", "id_value", "name", "password_digest", "updated_at"]
+    end
+
 	private
 	def send_otp_verify_mail(otp)
 		UserMailer.with(user: self, otp: otp).verify_otp.deliver_now

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   post 'users/verify_user'
   get 'users/resend_otp', to: 'users#resend_otp'
   post '/login', to: 'authentication#login'
