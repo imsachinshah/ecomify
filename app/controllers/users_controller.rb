@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ApiController
   include JsonWebTokenValidation
 
   before_action :validate_json_web_token, only: [:verify_user, :resend_otp]
