@@ -47,4 +47,5 @@ end
 
 gem "jwt"
 gem "jsonapi-serializer"
-
+gem 'pry'
+gem 'dotenv'

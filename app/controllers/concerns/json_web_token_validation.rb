@@ -10,11 +10,13 @@ module JsonWebTokenValidation
 
 	def validate_json_web_token
 		token = request.headers[:token] || params[:token]
+		otp_token = params[:otp_token] if params[:otp_token].present? 
 
 		begin 
 			@token = JsonWebToken.decode(token)
+			otp_token = JsonWebToken.decode(otp_token) if params[:otp_token].present?
 		rescue *ERROR_CLASSES => e
-			handle_exception
+			handle_exception(e)
 		end
 	end
 

@@ -1,34 +1,31 @@
 class UsersController < ApplicationController
+  include JsonWebTokenValidation
 
-  before_action :authenticate_user
+  before_action :validate_json_web_token, only: [:verify_user, :resend_otp]
+  skip_before_action :authenticate_request, only: :create
 
   def index
-    user = User.all 
-    render json: user, status: :ok
+    users = User.all 
+    render json: users, status: :ok
   end
 
   def create
-
     query_email = user_params[:email].downcase
     user = User.where("LOWER(email) = ?", query_email).first
 
-    validator - User.new(user_params)
-
-    if user || validator.valid?
-      render json: {errors: [
-        user: "Email already exists"
-      ]}, status: :unprocessable_entity
-
-    user = User.new(user_params)
-
-    if user.save
-      token = JsonWebToken.encode(user.id)
-
-      render json: UserSerializer.new(user, meta: {
-        token: token
-      }), status: :created
+    if user
+      render json: { errors: [{ user: "Email already exists" }] }, status: :unprocessable_entity
     else
-      render json: user.errors, status: :unprocessable_entity
+      @user = User.new(user_params)
+
+      if @user.save
+        token = JsonWebToken.encode(@user.id)
+        otp_token = @user.create_otp()
+
+        render json: UserSerializer.new(@user, meta: { token: token, otp_token: otp_token }), status: :created
+      else
+        render json: {errors: [@user.errors]}, status: :unprocessable_entity
+      end
     end
   end
 
@@ -38,6 +35,31 @@ class UsersController < ApplicationController
 
   def destroy
 
+  end
+
+  def verify_user
+    otp_decoded = JsonWebToken.decode(params[:otp_token])
+    otp_pin = EmailOtp.find(otp_decoded[:id]).otp
+
+    if otp_pin == params[:otp].to_i
+      @current_user.update(activated: true)
+      render json: {success: "Email OTP is verified"}, status: :ok 
+    else
+      render json: {error: "OTP is invalid, Please try again"}, status: :bad_request
+    end
+  end
+
+  def resend_otp
+    user = User.find(@token[:id])
+
+    if user.activated?
+      render json: {message: "user is already verified"}, status: :unprocessable_entity
+    else
+      otp_token = user.create_otp()
+      otp = user.email_otp
+      UserMailer.with(user: user, otp: otp).verify_otp.deliver_now
+      render json: {otp_token: otp_token}, status: :ok
+    end
   end
 
   private 
