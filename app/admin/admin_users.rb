@@ -25,4 +25,11 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
+  # Clothing
+  # Electronics
+  # Mobiles
+  # Laptops
+  # Books
+  # 
+
 end

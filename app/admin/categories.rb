@@ -7,8 +7,8 @@ ActiveAdmin.register Category, as: "Category" do
 	index do
     selectable_column
     id_column
-    column :picture do |img|
-    	# debugger
+    column :picture do |object|
+    	image_tag url_for(object.picture), width:100,height:80
     end
     column :name
     column :description
