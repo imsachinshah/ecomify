@@ -16,7 +16,20 @@ ActiveAdmin.register Category, as: "Category" do
     actions
   end
 
+  show do
+  	attributes_table do
+			row :name
+			row :description
+			row :picture do |object|
+	    	image_tag url_for(object.picture), width:100,height:80
+	    end
+			row :created_at
+			row :updated_at
+  	end
+  end
+
   form do |f|
+  	f.semantic_errors
   	f.input :name 
   	f.input :description
   	f.input :picture, as: :file

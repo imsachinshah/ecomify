@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   get 'users/resend_otp', to: 'users#resend_otp'
   post '/login', to: 'authentication#login'
 
-  get 'categories', to: 'categories#index'
+  resources :categories, :products
+  resources :reviews, only: [:create, :update, :index]
 end
