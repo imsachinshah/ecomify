@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  post 'users/verify_user'
-  get 'users/resend_otp', to: 'users#resend_otp'
-  post '/login', to: 'authentication#login'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -14,4 +11,10 @@ Rails.application.routes.draw do
   
   # Defines the root path route ("/")
   # root "posts#index"
+  post 'users/verify_user'
+  get 'users/resend_otp', to: 'users#resend_otp'
+  post '/login', to: 'authentication#login'
+
+  resources :categories, :products
+  resources :reviews, only: [:create, :update, :index]
 end
