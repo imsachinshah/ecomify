@@ -17,11 +17,11 @@ Rails.application.routes.draw do
 
   resources :categories, :products
   resources :reviews, only: [:create, :update, :index]
-  resources :carts, only: [:show] do
-    collection do
-      post 'add_item', to: 'carts#add_item'
-      delete 'remove_item/:id', to: 'carts#remove_item'
+  resources :carts, only: [:index]
+  resources :line_items, only: [:create, :destroy] do
+    member do 
+      put 'add_item_quantity'
+      put 'remove_item_quantity'
     end
   end
-  resources :line_items, only: [:create, :destroy]
 end
